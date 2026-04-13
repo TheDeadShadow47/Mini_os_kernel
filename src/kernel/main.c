@@ -32,7 +32,7 @@ void execute_command(char* input) {
         print_str("MiniOsKernal By Aymen v1.0 - \n");
     } 
     else if(str_compare(input,"TIME")==0){
-        uint8_t sec= rtc.seconds();
+        uint8_t sec= rtc_seconds();
         print_str("current rtc seconds: ");
         print_char((sec / 10)+ '0');
         print_char((sec % 10)+ '0');
