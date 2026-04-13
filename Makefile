@@ -1,25 +1,22 @@
 CC := x86_64-elf-gcc
 LD := x86_64-elf-ld
 
-# 1. Dynamically find ALL source files in the src tree
-# This catches drivers, kernel, and boot files regardless of nesting
+# finds all src files in src
 c_source_files   := $(shell find src -name "*.c")
 asm_source_files := $(shell find src -name "*.asm")
 
-# 2. Map all source files to the build/ directory
-# This preserves the folder structure inside build/ to avoid filename collisions
+# map all src  files to build
 c_object_files   := $(patsubst src/%.c, build/%.o, $(c_source_files))
 asm_object_files := $(patsubst src/%.asm, build/%.o, $(asm_source_files))
 
 all_object_files := $(c_object_files) $(asm_object_files)
 
-# 3. Rule for compiling C files
-# -I src/include allows you to use #include "header.h"
+# to use include 
 build/%.o: src/%.c
 	@mkdir -p $(dir $@)
 	$(CC) -c -I src/include -ffreestanding $< -o $@
 
-# 4. Rule for assembling NASM files (idt_.asm, port_.asm, etc.)
+# to assemble nasm files
 build/%.o: src/%.asm
 	@mkdir -p $(dir $@)
 	nasm -f elf64 $< -o $@
