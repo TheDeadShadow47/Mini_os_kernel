@@ -8,9 +8,6 @@
 
 void (*keyboard_handler_user)(struct KeyboardEvent event);
 
-/* * Translation function to convert Scancodes to ASCII characters.
- * This fulfills the requirement for displaying characters in real-time[cite: 36].
- */
 char to_ascii(uint16_t code) {
     switch (code) {
         case KEY_CODE_1: return '1';
@@ -79,8 +76,6 @@ void keyboard_handler() {
     }
     
     struct KeyboardEvent event;
-    
-    // Distinguish between key press (MAKE) and release (BREAK) [cite: 35]
     if ((scan_code & 0x80) == 0) {
         event.type = KEYBOARD_EVENT_TYPE_MAKE;
     } else {

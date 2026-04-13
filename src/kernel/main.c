@@ -1,5 +1,6 @@
 #include "print.h"
 #include "keyboard.h"
+#include "rtc.h"
 
 char input_buffer[128];
 int input_ptr = 0;
@@ -30,6 +31,14 @@ void execute_command(char* input) {
     else if (str_compare(input, "VERSION") == 0) {
         print_str("MiniOsKernal By Aymen v1.0 - \n");
     } 
+    else if(str_compare(input,"TIME")==0){
+        uint8_t sec= rtc.seconds();
+        print_str("current rtc seconds: ");
+        print_char((sec / 10)+ '0');
+        print_char((sec % 10)+ '0');
+        print_char('\n');
+
+    }
     else if (str_starts_with(input, "ECHO ")) {
         print_str(input + 5); 
         print_char('\n');
