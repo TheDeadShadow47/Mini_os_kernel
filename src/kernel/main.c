@@ -23,7 +23,7 @@ int str_starts_with(char* str, char* prefix) {
 
 void execute_command(char* input) {
     if (str_compare(input, "HELP") == 0) {
-        print_str("Commands: HELP, CLEAR, VERSION, ECHO <text>\n");
+        print_str("Commands: HELP, CLEAR, TIME,  VERSION, ECHO <text>\n");
     } 
     else if (str_compare(input, "CLEAR") == 0) {
         print_clear();
