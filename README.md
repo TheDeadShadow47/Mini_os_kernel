@@ -29,10 +29,12 @@ This project demonstrates a full transition from **Real Mode** to **Long Mode**.
   * **Boot**: Multiboot-compliant header with a 64-bit switch in NASM.
   * **Memory**: Custom GDT (Global Descriptor Table) setup.
   * **Interrupts**: Full IDT implementation with PIC remapping for clean hardware IRQs.
+  * **PMM**(Physical Memory Manager): Implements a Bitmap allocator tracking 4KB pages across the system.
   * **Drivers**:
       * **VGA**: Direct buffer manipulation for high-speed text rendering.
       * **Keyboard**: Scancode-to-ASCII translation layer.
       * **RTC**: Direct CMOS port communication for real-time tracking.
+      * **CPU**: CPUID integration for vendor identification.
 
 ### The Shell
 
@@ -43,6 +45,9 @@ The kernel boots directly into an interactive CLI. Available commands:
   * `CLEAR` - Re-initializes the VGA buffer.
   * `HELP` - Lists available system commands.
   * `VERSION` - Displays kernel metadata.
+  * `CPU` - Queries the processor for the Vendor ID.
+  * `MEM` - Allocates and tests physical memory pages, displaying hex addresses.
+  * `FREE` - Displays the total amount of available RAM in Kilobytes.
 
 -----
 
@@ -57,15 +62,18 @@ src/
 ```
 
 ### Milestone Status
+[x] 64-bit Long Mode Switch
 
-  - [x] 64-bit Long Mode Switch
-  - [x] Interrupt Handling (Keyboard/Timer)
-  - [x] RTC CMOS Integration
-  - [x] Clean Git Flow (Main/Develop)
+[x] Physical Memory Manager (Bitmap)
 
+[x] CPUID Vendor Integration
+
+[x] Interrupt Handling (Keyboard/Timer)
+
+[x] RTC CMOS Integration
 -----
 
 **Maintained by:** [Aymen Hakkaoui]
-**Version:** `1.0.0`
+**Version:** `1.1.0`
 
 ````
