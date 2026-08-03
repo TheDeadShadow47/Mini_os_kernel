@@ -1,79 +1,362 @@
+<div align="center">
+
 # MiniOS-64
-> A bare-metal x86_64 kernel featuring a custom shell and hardware integration.
 
-### Quick Start
-If you have **Docker** and **QEMU** ready, you can see the kernel in action in under 60 seconds:
+### A Bare-Metal x86_64 Operating System Built from Scratch
 
-```bash
-# 1. Build the toolchain environment
-docker build BuildEnv -t myos-buildenv .
+A lightweight educational operating system written in **C** and **NASM Assembly**, demonstrating the complete boot process from **Real Mode** to **64-bit Long Mode**. MiniOS-64 features a custom bootloader, interrupt handling, hardware drivers, a bitmap-based physical memory manager, and an interactive kernel shell.
 
-# 2. Compile the ISO (inside the container)
-docker run --rm -it -v "${pwd}:/root/env" myos-buildenv
-make build-x86_64
-exit
+![C](https://img.shields.io/badge/C-00599C?style=for-the-badge&logo=c&logoColor=white)
+![Assembly](https://img.shields.io/badge/NASM-Assembly-orange?style=for-the-badge)
+![x86--64](https://img.shields.io/badge/x86--64-Architecture-red?style=for-the-badge)
+![QEMU](https://img.shields.io/badge/QEMU-Emulator-009688?style=for-the-badge)
+![GRUB](https://img.shields.io/badge/GRUB-Multiboot-blue?style=for-the-badge)
+![Docker](https://img.shields.io/badge/Docker-Build_Environment-2496ED?style=for-the-badge&logo=docker&logoColor=white)
 
-# 3. Launch the OS (Windows path)
-& "C:\Program Files\qemu\qemu-system-x86_64.exe" -cdrom dist/x86_64/kernel.iso
+</div>
 
-# 4. Clean up
-docker rmi myos-buildenv -f
-````
+---
 
------
+# 📖 Overview
 
-### The Tech Stack
+**MiniOS-64** is a bare-metal operating system built entirely from scratch without relying on an existing operating system.
 
-This project demonstrates a full transition from **Real Mode** to **Long Mode**.
+The project demonstrates many fundamental concepts of low-level systems programming, including CPU initialization, memory management, interrupt handling, hardware communication, and kernel development.
 
-  * **Boot**: Multiboot-compliant header with a 64-bit switch in NASM.
-  * **Memory**: Custom GDT (Global Descriptor Table) setup.
-  * **Interrupts**: Full IDT implementation with PIC remapping for clean hardware IRQs.
-  * **PMM**(Physical Memory Manager): Implements a Bitmap allocator tracking 4KB pages across the system.
-  * **Drivers**:
-      * **VGA**: Direct buffer manipulation for high-speed text rendering.
-      * **Keyboard**: Scancode-to-ASCII translation layer.
-      * **RTC**: Direct CMOS port communication for real-time tracking.
-      * **CPU**: CPUID integration for vendor identification.
+The operating system boots directly into an interactive command-line shell where users can interact with the kernel and communicate directly with hardware components such as the keyboard, CMOS Real-Time Clock, and CPU.
 
-### The Shell
+---
 
-The kernel boots directly into an interactive CLI. Available commands:
+# ✨ Features
 
-  * `TIME` - Queries the CMOS for current hardware seconds.
-  * `ECHO <msg>` - Tests buffer handling and string parsing.
-  * `CLEAR` - Re-initializes the VGA buffer.
-  * `HELP` - Lists available system commands.
-  * `VERSION` - Displays kernel metadata.
-  * `CPU` - Queries the processor for the Vendor ID.
-  * `MEM` - Allocates and tests physical memory pages, displaying hex addresses.
-  * `FREE` - Displays the total amount of available RAM in Kilobytes.
+## 🚀 Boot Process
 
------
+- Multiboot-compliant bootloader
+- Real Mode → Protected Mode → Long Mode transition
+- 64-bit kernel initialization
+- Custom Global Descriptor Table (GDT)
+- Paging initialization
 
-### Architecture
+---
+
+## 🧠 Memory Management
+
+- Bitmap-based Physical Memory Manager
+- 4 KB page allocation
+- Dynamic page allocation
+- Free memory reporting
+
+---
+
+## ⚡ Interrupt Handling
+
+- Complete Interrupt Descriptor Table (IDT)
+- Programmable Interrupt Controller (PIC) remapping
+- Keyboard interrupts
+- Hardware timer support
+
+---
+
+## 🖥 Hardware Drivers
+
+### VGA Driver
+
+- Direct VGA text buffer manipulation
+- High-performance text rendering
+- Screen clearing
+- Cursor management
+
+### Keyboard Driver
+
+- Keyboard interrupt handling
+- Scancode → ASCII translation
+- Interactive shell input
+
+### RTC Driver
+
+- Direct CMOS communication
+- Reads hardware time
+- Real-time clock support
+
+### CPU Driver
+
+- CPUID instruction support
+- CPU Vendor detection
+- Processor identification
+
+---
+
+# 💻 Interactive Shell
+
+The kernel boots directly into a built-in command-line interface.
+
+Available commands include:
+
+| Command | Description |
+|----------|-------------|
+| `HELP` | Display all available commands |
+| `VERSION` | Display kernel information |
+| `TIME` | Read the current hardware time from CMOS |
+| `CPU` | Display the processor vendor |
+| `ECHO <message>` | Echo text back to the console |
+| `CLEAR` | Clear the VGA screen |
+| `MEM` | Allocate physical memory pages and display addresses |
+| `FREE` | Display available physical memory |
+
+---
+
+# 📸 Screenshots
+
+## Boot Screen
+
+> Add a screenshot of the kernel boot process.
+
+```text
+README/images/boot.png
+```
+
+---
+
+## Interactive Shell
+
+> Add a screenshot showing the shell commands.
+
+```text
+README/images/shell.png
+```
+
+---
+
+## Memory Manager
+
+> Add a screenshot of the MEM command.
+
+```text
+README/images/memory.png
+```
+
+---
+
+# 🛠 Tech Stack
+
+| Category | Technology |
+|-----------|------------|
+| Language | C |
+| Assembly | NASM |
+| Architecture | x86_64 |
+| Boot Protocol | Multiboot |
+| Build System | GNU Make |
+| Emulator | QEMU |
+| Build Environment | Docker |
+
+---
+
+# 🏗 Architecture
+
+```text
+                     BIOS / Bootloader
+                             │
+                             ▼
+                  Multiboot-Compliant Header
+                             │
+                             ▼
+                  Real Mode Initialization
+                             │
+                             ▼
+              Protected Mode → Long Mode
+                             │
+                             ▼
+                  Kernel Initialization
+                             │
+        ┌──────────────┬──────────────┬──────────────┐
+        ▼              ▼              ▼
+      Drivers        Memory         Shell
+        │              │              │
+        └──────────────┴──────────────┘
+                     Hardware
+```
+
+---
+
+# 📂 Project Structure
 
 ```text
 src/
-├── boot/      # Assembly entry points & CPU initialization
-├── drivers/   # Hardware logic (Keyboard, VGA, RTC, IDT)
-├── kernel/    # Shell logic & Main execution loop
-└── include/   # Centralized header definitions
+├── boot/          # Bootloader & CPU initialization
+├── drivers/       # VGA, Keyboard, RTC, IDT
+├── include/       # Header files
+└── kernel/        # Kernel entry point & shell
+
+dist/
+└── x86_64/
+    └── kernel.iso
 ```
 
-### Milestone Status
-[x] 64-bit Long Mode Switch
+---
 
-[x] Physical Memory Manager (Bitmap)
+# 🚀 Quick Start
 
-[x] CPUID Vendor Integration
+## Build the Docker Environment
 
-[x] Interrupt Handling (Keyboard/Timer)
+```bash
+docker build BuildEnv -t myos-buildenv .
+```
 
-[x] RTC CMOS Integration
------
+---
 
-**Maintained by:** [Aymen Hakkaoui]
-**Version:** `1.1.0`
+## Compile the Operating System
 
-````
+```bash
+docker run --rm -it -v "${pwd}:/root/env" myos-buildenv
+```
+
+Inside the container:
+
+```bash
+make build-x86_64
+```
+
+Exit the container:
+
+```bash
+exit
+```
+
+---
+
+## Launch the Operating System
+
+Windows
+
+```powershell
+& "C:\Program Files\qemu\qemu-system-x86_64.exe" -cdrom dist/x86_64/kernel.iso
+```
+
+---
+
+## Clean Up
+
+```bash
+docker rmi myos-buildenv -f
+```
+
+---
+
+# ⚙ Requirements
+
+Before building the project, install:
+
+- Docker
+- GNU Make
+- NASM
+- QEMU
+- x86_64 GCC Cross Compiler
+
+---
+
+# 🧩 Core Components
+
+### Bootloader
+
+Responsible for transitioning the processor from Real Mode into 64-bit Long Mode before transferring execution to the kernel.
+
+### Memory Manager
+
+Implements a bitmap allocator that tracks physical memory using 4 KB pages.
+
+### Interrupt Manager
+
+Initializes the IDT and remaps the PIC to correctly handle hardware interrupts.
+
+### Shell
+
+Provides an interactive command-line interface for interacting directly with kernel functionality.
+
+### Drivers
+
+Implements low-level communication with:
+
+- VGA
+- Keyboard
+- RTC
+- CPU
+
+---
+
+# ⚡ Current Milestones
+
+- ✅ 64-bit Long Mode
+- ✅ Global Descriptor Table
+- ✅ Interrupt Descriptor Table
+- ✅ PIC Remapping
+- ✅ Bitmap Physical Memory Manager
+- ✅ Keyboard Driver
+- ✅ VGA Driver
+- ✅ CMOS RTC Driver
+- ✅ CPUID Vendor Detection
+- ✅ Interactive Kernel Shell
+
+---
+
+# 🔮 Future Roadmap
+
+Planned improvements include:
+
+- Virtual Memory Manager
+- Heap Allocator
+- Paging Improvements
+- ATA Disk Driver
+- FAT32 File System
+- PCI Enumeration
+- PS/2 Mouse Driver
+- User Mode Support
+- Multitasking Scheduler
+- ELF Executable Loader
+- System Calls
+- Networking Stack
+
+---
+
+# 🤝 Contributing
+
+Contributions are welcome!
+
+To contribute:
+
+```bash
+git checkout -b feature/my-feature
+```
+
+```bash
+git commit -m "Add awesome feature"
+```
+
+```bash
+git push origin feature/my-feature
+```
+
+Then open a Pull Request.
+
+---
+
+# 📄 License
+
+This project is released under the **MIT License**.
+
+---
+
+# 👨‍💻 Author
+
+**Aymen Hakkaoui**
+
+Software Engineer • Systems Programming Enthusiast
+
+---
+
+<div align="center">
+
+### Built from the ground up, one instruction at a time.
+
+⭐ If you enjoyed this project, consider giving it a star!
+
+</div>
