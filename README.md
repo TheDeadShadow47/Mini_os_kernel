@@ -105,38 +105,6 @@ Available commands include:
 
 ---
 
-# 📸 Screenshots
-
-## Boot Screen
-
-> Add a screenshot of the kernel boot process.
-
-```text
-README/images/boot.png
-```
-
----
-
-## Interactive Shell
-
-> Add a screenshot showing the shell commands.
-
-```text
-README/images/shell.png
-```
-
----
-
-## Memory Manager
-
-> Add a screenshot of the MEM command.
-
-```text
-README/images/memory.png
-```
-
----
-
 # 🛠 Tech Stack
 
 | Category | Technology |
